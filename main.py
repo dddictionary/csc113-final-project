@@ -2,10 +2,11 @@ from Board import Board
 from Player import Player
 
 def main():
-    print("hello, world")
+    DIM = 4
+    board = Board(DIM)
+    player = Player(board)
+    board.start()
+    
     
 if __name__ == '__main__':
     main()
-
-print("Hi")
-print("HIII :33")

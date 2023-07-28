@@ -2,14 +2,59 @@ import tkinter as tk
 from Player import Player
 import random
 
-class Board():
+class Board(tk.TK):
     def __init__(self, dim):
+        super.__init__()
         self.dim = dim
         self.cells = self.generate_empty_grid()
         self.compressed = False
         self.merged = False
         self.moved = False
         self.current_score = 0
+        self.title('2048')
+        self.resizable(False, False)
+        self.background = tk.Frame(self, bg=tk.GamePanel.BACKGROUND_COLOR)
+        self.cell_labels = []
+        for i in range(self.grid.size):
+            row_labels = []
+            for j in range(self.grid.size):
+                label = tk.Label(self.background, text='',
+                                 bg=tk.GamePanel.EMPTY_CELL_COLOR,
+                                 justify=tk.CENTER, font=tk.GamePanel.FONT,
+                                 width=4, height=2)
+                label.grid(row=i, column=j, padx=10, pady=10)
+                row_labels.append(label)
+            self.cell_labels.append(row_labels)
+        self.background.pack(side=tk.TOP)
+    
+    def draw(self):
+        for i in range(self.grid.size):
+            for j in range(self.grid.size):
+                if self.grid.cells[i][j] == 0:
+                    self.cell_labels[i][j].configure(
+                         text='',
+                         bg=tk.GamePanel.EMPTY_CELL_COLOR)
+                else:
+                    cell_text = str(self.grid.cells[i][j])
+                    if self.grid.cells[i][j] > 2048:
+                        bg_color = tk.GamePanel.CELL_BACKGROUND_COLOR_DICT.get('beyond')
+                        fg_color = tk.GamePanel.CELL_COLOR_DICT.get('beyond')
+                    else:
+                        bg_color = tk.GamePanel.CELL_BACKGROUND_COLOR_DICT.get(cell_text)
+                        fg_color = tk.GamePanel.CELL_COLOR_DICT.get(cell_text)
+                    self.cell_labels[i][j].configure(
+                        text=cell_text,
+                        bg=bg_color, fg=fg_color)
+
+    def add_start_cells(self):
+        for i in range(self.start_cells_num):
+            self.grid.random_cell()
+    
+    def start(self):
+        self.add_start_cells()
+        self.draw()
+        self.bind('<Key>', self.key_handler)
+        self.panel.root.mainloop()
     
     def retrieve_empty_cells(self):
         ret = []
