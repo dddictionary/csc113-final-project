@@ -1,12 +1,15 @@
 from Board import Board
 from Player import Player
+from Game import Game
+
 
 def main():
-    DIM = 4
-    board = Board(DIM)
-    player = Player(board)
-    board.start()
-    
-    
+    dim = 4
+    board = Board(dim)
+    game = Game(board)
+    player = Player(board, game)
+    player.play()
+
+
 if __name__ == '__main__':
     main()
