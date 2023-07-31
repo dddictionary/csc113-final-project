@@ -27,12 +27,12 @@ class Player:
             self.board.generate_random_cell()
 
     def can_move(self):
-        return self.board.contains_empty_cells() or self.board.mergeable()
+        return self.board.has_empty_cells() or self.board.mergeable()
 
     def handle_key_press(self, event):
         if self.is_game_over():
             return
-        self.board.clear_flags()
+        self.board.remove_checks()
         key_value = event.keysym
 
         if key_value in c.UP_KEYS:
@@ -71,10 +71,10 @@ class Player:
         messagebox.showinfo('2048', 'Game Over!')
 
     def left(self):
-        self.board.move_cells()
+        self.board.slide_cells()
         self.board.combine_cells()
-        self.board.moved = self.board.compressed or self.board.merged
-        self.board.move_cells()
+        self.board.moved = self.board.slided or self.board.combined
+        self.board.slide_cells()
 
     def right(self):
         self.board.reverse()

@@ -6,9 +6,9 @@ class Board:
     def __init__(self, dim):
         self.dim = dim
         self.cells = self.generate_empty_board()
-        self.compressed = False
+        self.slided = False
         self.moved = False
-        self.merged = False
+        self.combined = False
         self.current_score = 0
 
     def generate_random_cell(self):
@@ -53,13 +53,13 @@ class Board:
                 start += 1
                 end -= 1
 
-    def clear_flags(self):
-        self.compressed = False
-        self.merged = False
+    def remove_checks(self):
+        self.slided = False
+        self.combined = False
         self.moved = False
 
-    def move_cells(self):
-        self.compressed = False
+    def slide_cells(self):
+        self.slided = False
         new_board = self.generate_empty_board()
         for i in range(self.dim):
             count = 0
@@ -67,19 +67,19 @@ class Board:
                 if self.cells[i][j] != 0:
                     new_board[i][count] = self.cells[i][j]
                     if count != j:
-                        self.compressed = True
+                        self.slided = True
                     count += 1
         self.cells = new_board
 
     def combine_cells(self):
-        self.merged = False
+        self.combined = False
         for i in range(self.dim):
             for j in range(self.dim - 1):
                 if self.cells[i][j] == self.cells[i][j + 1] and self.cells[i][j] != 0:
                     self.cells[i][j] *= 2
                     self.cells[i][j + 1] = 0
                     self.current_score += self.cells[i][j]
-                    self.merged = True
+                    self.combined = True
 
     def found_2048(self):
         for i in range(self.dim):
@@ -88,7 +88,7 @@ class Board:
                     return True
         return False
 
-    def contains_empty_cells(self):
+    def has_empty_cells(self):
         for i in range(self.dim):
             for j in range(self.dim):
                 if self.cells[i][j] == 0:
